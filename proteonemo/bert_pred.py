@@ -29,5 +29,6 @@ n_toks = 512
 hidden_dim = 768
 
 preds = trainer.predict(model, request_dl)
-embeddings = torch.stack(preds).view(-1, n_toks, hidden_dim) # todo: use the nemo functionality
+preds = preds.view(-1, n_toks, hidden_dim)
+embeddings = torch.cat(preds, 0) # todo: use the nemo functionality
 torch.save(embeddings.clone(), 'bert_results.pt')
