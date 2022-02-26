@@ -25,10 +25,6 @@ params = {'batch_size': 16,
           'num_workers': 8}
 request_dl = DataLoader(dataset, **params)
 
-n_toks = 512
-hidden_dim = 768
-
 preds = trainer.predict(model, request_dl)
 embeddings = torch.cat(preds, 1) 
-embeddings = embeddings.view(-1, n_toks, hidden_dim) # todo: use the nemo functionality
 torch.save(embeddings.clone(), 'bert_results.pt')
