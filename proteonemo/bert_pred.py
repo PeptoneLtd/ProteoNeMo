@@ -26,5 +26,5 @@ params = {'batch_size': 16,
 request_dl = DataLoader(dataset, **params)
 
 preds = trainer.predict(model, request_dl)
-embeddings = torch.cat(preds, 1) 
+embeddings = torch.cat(preds, 0) 
 torch.save(embeddings.clone(), 'bert_results.pt')
