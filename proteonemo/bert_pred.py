@@ -9,11 +9,12 @@ from nemo.collections.nlp.data.language_modeling.lm_bert_dataset import BertPret
 from torch.utils.data import DataLoader
 from nemo.utils import logging
 
+assert torch.cuda.is_available()
+
+
 @hydra_runner(config_path="conf", config_name="bert_inference_from_preprocessed_config")
 def main(cfg: DictConfig) -> None:
-    assert torch.cuda.is_available()
     torch.set_grad_enabled(False)
-
     logging.info(f'Config:\n {OmegaConf.to_yaml(cfg)}')
     trainer = pl.Trainer(plugins=[DDPPlugin(find_unused_parameters=True)],  **cfg.trainer)
     app_state = AppState()
