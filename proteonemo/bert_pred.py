@@ -1,32 +1,39 @@
 import pytorch_lightning as pl
 import torch
+from omegaconf import DictConfig, OmegaConf
+from nemo.core.config import hydra_runner
 from pytorch_lightning.plugins import DDPPlugin
-#from pytorch_lightning.trainer.trainer import Trainer
 from nemo.utils.app_state import AppState
-#from nemo.collections.nlp.models.language_modeling import BERTLMModel
 from bert_prot_model import BERTPROTModel
-import pickle as pkl
-from nemo.collections.nlp.data.language_modeling.lm_bert_dataset import BertPretrainingPreprocessedDataset, BertPretrainingPreprocessedDataloader
-from torch.utils.data import DataLoader, TensorDataset
+from nemo.collections.nlp.data.language_modeling.lm_bert_dataset import BertPretrainingPreprocessedDataset
+from torch.utils.data import DataLoader
+from nemo.utils import logging
 
-assert torch.cuda.is_available()
-torch.set_grad_enabled(False)
+@hydra_runner(config_path="conf", config_name="bert_inference_from_preprocessed_config")
+def main(cfg: DictConfig) -> None:
+    assert torch.cuda.is_available()
+    torch.set_grad_enabled(False)
 
-trainer = pl.Trainer(plugins=DDPPlugin(find_unused_parameters=True), gpus=1, fast_dev_run=False)
-app_state = AppState()
-model = BERTPROTModel.restore_from(restore_path='bert_base_wikipedia.nemo', trainer=trainer)
-model.freeze()
-base_path = "/workspace/nemo/WIKIPEDIA/hdf5_lower_case_1_seq_len_512_max_pred_80_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en"
-dataset = BertPretrainingPreprocessedDataset(input_file=f"{base_path}/wikicorpus_en_training_0.hdf5", max_predictions_per_seq=80)
-input_ids, input_type_ids, input_mask, output_ids, output_mask, labels = dataset.inputs
+    logging.info(f'Config:\n {OmegaConf.to_yaml(cfg)}')
+    trainer = pl.Trainer(plugins=[DDPPlugin(find_unused_parameters=True)],  **cfg.trainer)
+    app_state = AppState()
+    model = BERTPROTModel.restore_from(restore_path=cfg.model.nemo_path, trainer=trainer)
+    model.freeze()
+    dataset = BertPretrainingPreprocessedDataset(input_file=cfg.model.infer_ds.data_file, 
+        max_predictions_per_seq=cfg.model.infer_ds.max_predictions_per_seq)
 
-params = {'batch_size': 16,
-          'shuffle': False,
-          'num_workers': 8}
-request_dl = DataLoader(dataset, **params)
+    request_dl = DataLoader(dataset, 
+        batch_size=cfg.model.infer_ds.batch_size,
+        shuffle=cfg.model.infer_ds.shuffle,
+        num_workers=cfg.model.infer_ds.num_workers)
 
-preds = trainer.predict(model, request_dl)
-representations = torch.cat(preds, 0).clone()
+    preds = trainer.predict(model, request_dl)
+    representations = torch.cat(preds, 0).clone()
 
-for i, sequence in enumerate(representations):
-    torch.save(sequence, f'bert_reprs/bert_results_{i}.pt')
+    if cfg.model.representations_path:
+        for i, sequence in enumerate(representations):
+            torch.save(sequence, f'{cfg.model.representations_path}/bert_results_{i}.pt')
+
+
+if __name__ == '__main__':
+    main()

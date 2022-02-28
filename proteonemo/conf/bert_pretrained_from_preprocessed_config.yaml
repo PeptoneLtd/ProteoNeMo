@@ -43,12 +43,12 @@ model:
   tokenizer: null
 
   train_ds:
-    data_file: '/workspace/nemo/WIKIPEDIA/hdf5_lower_case_1_seq_len_512_max_pred_80_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en' # path to hdf5 file (or directory)
+    data_file: '/data/WIKIPEDIA/hdf5_lower_case_1_seq_len_512_max_pred_80_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en' # path to hdf5 file (or directory)
     max_predictions_per_seq: 80
     batch_size: 16
     shuffle: true
     num_samples: -1
-    num_workers: 128
+    num_workers: 8
     drop_last: false
     pin_memory: false
 
