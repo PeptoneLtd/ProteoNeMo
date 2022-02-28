@@ -28,11 +28,13 @@ def main(cfg: DictConfig) -> None:
         num_workers=cfg.model.infer_ds.num_workers)
 
     preds = trainer.predict(model, request_dl)
-    representations = torch.cat(preds, 0).clone()
 
     if cfg.model.representations_path:
-        for i, sequence in enumerate(representations):
-            torch.save(sequence, f'{cfg.model.representations_path}/bert_results_{i}.pt')
+        i=0
+        for pred in preds:
+            for sequence in pred:
+                torch.save(sequence, f'{cfg.model.representations_path}/bert_results_{i}.pt')
+                i+=1
 
 
 if __name__ == '__main__':
