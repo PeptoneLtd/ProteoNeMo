@@ -26,5 +26,7 @@ params = {'batch_size': 16,
 request_dl = DataLoader(dataset, **params)
 
 preds = trainer.predict(model, request_dl)
-for i, representation in enumerate(preds):
-    torch.save(representation.clone(), f'bert_reprs/bert_results_{i}.pt')
+representations = torch.cat(preds, 0).clone()
+
+for i, sequence in enumerate(representations):
+    torch.save(sequence, f'bert_reprs/bert_results_{i}.pt')
