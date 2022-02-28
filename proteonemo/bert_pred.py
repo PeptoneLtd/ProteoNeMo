@@ -6,6 +6,7 @@ from pytorch_lightning.plugins import DDPPlugin
 from nemo.utils.app_state import AppState
 from bert_prot_model import BERTPROTModel
 from nemo.collections.nlp.data.language_modeling.lm_bert_dataset import BertPretrainingPreprocessedDataset
+from nemo.collections.nlp.modules.common.megatron.megatron_utils import compute_model_parallel_rank
 from torch.utils.data import DataLoader
 from nemo.utils import logging
 
@@ -17,7 +18,12 @@ def main(cfg: DictConfig) -> None:
     torch.set_grad_enabled(False)
     logging.info(f'Config:\n {OmegaConf.to_yaml(cfg)}')
     trainer = pl.Trainer(plugins=[DDPPlugin(find_unused_parameters=True)],  **cfg.trainer)
+
     app_state = AppState()
+    if cfg.trainer.gpus > 1:
+        app_state.model_parallel_size = cfg.trainer.gpus
+        app_state.model_parallel_rank = compute_model_parallel_rank(trainer.local_rank, app_state.model_parallel_size)
+
     model = BERTPROTModel.restore_from(restore_path=cfg.model.nemo_path, trainer=trainer)
     model.freeze()
     dataset = BertPretrainingPreprocessedDataset(input_file=cfg.model.infer_ds.data_file, 
