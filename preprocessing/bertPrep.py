@@ -21,6 +21,7 @@ import multiprocessing
 import os
 import pprint
 import subprocess
+import random
 
 
 def main(args):
@@ -94,12 +95,9 @@ def main(args):
             # it seemed unnecessarily complicated to add an additional preprocessing step to call just for this.
             # Different languages (e.g., Chinese simplified/traditional) may require translation and
             # other packages to be called from here -- just add a conditional branch for those extra steps
-            segmenter = TextSharding.NLTKSegmenter()
-            sharding = TextSharding.Sharding(args.input_files, output_file_prefix, args.n_training_shards, args.n_test_shards, args.fraction_test_set)
-
-            sharding.load_articles()
-            sharding.segment_articles_into_sentences(segmenter)
-            sharding.distribute_articles_over_shards()
+            rng = random.Random(args.random_seed)
+            sharding = ProteinSharding.Sharding(args.input_files, output_file_prefix, args.n_training_shards, args.n_test_shards, args.fraction_test_set, rng)
+            sharding.load_fastas()
             sharding.write_shards_to_disk()
 
         else:
