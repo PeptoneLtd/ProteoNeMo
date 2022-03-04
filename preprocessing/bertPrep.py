@@ -91,10 +91,6 @@ def main(args):
             if not os.path.exists(directory_structure['sharded'] + '/' + args.dataset):
                 os.makedirs(directory_structure['sharded'] + '/' + args.dataset)
 
-            # Segmentation is here because all datasets look the same in one article/book/whatever per line format, and
-            # it seemed unnecessarily complicated to add an additional preprocessing step to call just for this.
-            # Different languages (e.g., Chinese simplified/traditional) may require translation and
-            # other packages to be called from here -- just add a conditional branch for those extra steps
             rng = random.Random(args.random_seed)
             sharding = ProteinSharding.Sharding(args.input_files, output_file_prefix, args.n_training_shards, args.n_test_shards, args.fraction_test_set, rng)
             sharding.load_fastas()
