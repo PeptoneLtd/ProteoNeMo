@@ -16,8 +16,6 @@ import Downloader
 import ProteinSharding
 
 import argparse
-import itertools
-import multiprocessing
 import os
 import pprint
 import subprocess
