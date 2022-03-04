@@ -254,5 +254,10 @@ if __name__ == "__main__":
         help='Specify absolute path to vocab file to use)'
     )
 
+    parser.add_argument("--do_upper_case",
+        action='store_true',
+        default=True,
+        help="Whether to upper case the input text. True for uncased models, False for cased models.")
+
     args = parser.parse_args()
     main(args)

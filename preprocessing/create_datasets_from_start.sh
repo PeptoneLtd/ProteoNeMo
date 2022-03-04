@@ -44,5 +44,5 @@ python3 bertPrep.py --action sharding --dataset $DATASET
 
 # Create HDF5 files
 python3 bertPrep.py --action create_hdf5_files --dataset $DATASET --max_seq_length 1024 \
---max_predictions_per_seq 160 --vocab_file vocab.txt --small_vocab_file small_vocab.txt --do_upper_case 1
+--max_predictions_per_seq 160 --vocab_file vocab.txt --small_vocab_file vocab_small.txt --do_upper_case
 
