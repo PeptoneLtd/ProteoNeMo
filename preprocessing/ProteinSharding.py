@@ -68,7 +68,7 @@ class Sharding:
     def write_shards_to_disk(self):
         print('Start: Write Shards to Disk')
         for shard in self.output_training_files:
-            shard_name = f'{self.output_name_prefix}_{self.output_training_identifier}_{shard}{self.output_file_extension}'
+            shardname = f'{self.output_name_prefix}_{self.output_training_identifier}_{shard}{self.output_file_extension}'
             self.write_single_shard(shard_name, self.output_training_files[shard])
 
         for shard in self.output_test_files:

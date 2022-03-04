@@ -110,11 +110,12 @@ def main(args):
             os.makedirs(directory_structure['hdf5'] + "/" + args.dataset)
 
         def create_record_worker(filename_prefix, shard_id, output_format='hdf5'):
-            bert_preprocessing_command = 'python /workspace/bert/create_pretraining_data.py'
+            bert_preprocessing_command = 'python create_pretraining_data.py'
             bert_preprocessing_command += ' --input_file=' + directory_structure['sharded'] + '/' + args.dataset + '/' + filename_prefix + '_' + str(shard_id) + '.txt'
             bert_preprocessing_command += ' --output_file=' + directory_structure['hdf5'] + '/' + args.dataset + '/' + filename_prefix + '_' + str(shard_id) + '.' + output_format
             bert_preprocessing_command += ' --vocab_file=' + args.vocab_file
-            bert_preprocessing_command += ' --do_lower_case' if args.do_lower_case else ''
+            bert_preprocessing_command += ' --small_vocab_file=' + args.small_vocab_file
+            bert_preprocessing_command += ' --do_upper_case' if args.do_upper_case else ''
             bert_preprocessing_command += ' --max_seq_length=' + str(args.max_seq_length)
             bert_preprocessing_command += ' --max_predictions_per_seq=' + str(args.max_predictions_per_seq)
             bert_preprocessing_command += ' --masked_lm_prob=' + str(args.masked_lm_prob)
@@ -163,9 +164,15 @@ if __name__ == "__main__":
         type=str,
         help='Specify the dataset to perform --action on',
         choices={
-            'uniref50',
-            'uniref90',
-            'uniref100',
+            'uniref_50',
+            'uniref_90',
+            'uniref_100',
+            'uniref_all',
+            'uniprotkb_swissprot',
+            'uniprotkb_trembl',
+            'uniprotkb_isoformseqs',
+            'uniprotkb_all',
+            'uniparc',
             'all'
         }
     )
@@ -195,16 +202,6 @@ if __name__ == "__main__":
         type=float,
         help='Specify the fraction (0..1) of the data to withhold for the test data split (based on number of sequences)',
         default=0.1
-    )
-
-    parser.add_argument(
-        '--segmentation_method',
-        type=str,
-        help='Specify your choice of sentence segmentation',
-        choices={
-            'nltk'
-        },
-        default='nltk'
     )
 
     parser.add_argument(
@@ -239,14 +236,14 @@ if __name__ == "__main__":
         '--max_seq_length',
         type=int,
         help='Specify the maximum sequence length',
-        default=512
+        default=1024
     )
 
     parser.add_argument(
         '--max_predictions_per_seq',
         type=int,
         help='Specify the maximum number of masked words per sequence',
-        default=20
+        default=160
     )
 
     parser.add_argument(
@@ -256,16 +253,9 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        '--skip_wikiextractor',
-        type=int,
-        help='Specify whether to skip wikiextractor step 0=False, 1=True',
-        default=0
-    )
-
-    parser.add_argument(
-        '--interactive_json_config_generator',
+        '--small_vocab_file',
         type=str,
-        help='Specify the action you want the app to take. e.g., generate vocab, segment, create tfrecords'
+        help='Specify absolute path to vocab file to use)'
     )
 
     args = parser.parse_args()

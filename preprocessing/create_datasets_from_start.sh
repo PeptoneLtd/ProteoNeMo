@@ -16,32 +16,33 @@ to_download=${1:-"uniref_50_only"}
 
 #Download
 if [ "$to_download" = "uniref_all" ] ; then
-    python3 /proteonemo/preprocessing/bertPrep.py --action download --dataset uniref_90
-    python3 /proteonemo/preprocessing/bertPrep.py --action download --dataset uniref_100
+    python3 bertPrep.py --action download --dataset uniref_90
+    python3 bertPrep.py --action download --dataset uniref_100
+elif [ "$to_download" = "uniparc" ] ; then
+    python3 /proteonemo/preprocessing/bertPrep.py --action download --dataset uniparc
+elif [ "$to_download" = "uniprotkb_all" ] ; then
+    python3 bertPrep.py --action download --dataset uniprotkb_swissprot
+    python3 bertPrep.py --action download --dataset uniprotkb_trembl
+    python3 bertPrep.py --action download --dataset uniprotkb_isoformseqs
 fi
 
 python3 /proteonemo/preprocessing/bertPrep.py --action download --dataset uniref_50
 
-# Properly format the text files
-if [ "$to_download" = "wiki_books" ] ; then
-    python3 /workspace/bert/data/bertPrep.py --action text_formatting --dataset bookscorpus
-fi
-python3 /workspace/bert/data/bertPrep.py --action text_formatting --dataset wikicorpus_en
-
 if [ "$to_download" = "uniref_all" ] ; then
-    DATASET="uniref_50_90_100"
+    DATASET="uniref_all"
+elif [ "$to_download" = "uniparc" ] ; then
+    DATASET="uniparc"
+elif [ "$to_download" = "uniprotkb_all" ] ; then
+    DATASET="uniprotkb_all"
 else
     DATASET="uniref_50"
     # Shard the text files
 fi
 
 # Shard the text files
-python3 /proteonemo/preprocessing/bertPrep.py --action sharding --dataset $DATASET
+python3 bertPrep.py --action sharding --dataset $DATASET
 
-# Create HDF5 files Phase 1
-python3 /workspace/bert/data/bertPrep.py --action create_hdf5_files --dataset $DATASET --max_seq_length 128 \
+# Create HDF5 files
+python3 bertPrep.py --action create_hdf5_files --dataset $DATASET --max_seq_length 128 \
 --max_predictions_per_seq 20 --vocab_file $BERT_PREP_WORKING_DIR/download/google_pretrained_weights/uncased_L-24_H-1024_A-16/vocab.txt --do_lower_case 1
 
-# Create HDF5 files Phase 2
-python3 /workspace/bert/data/bertPrep.py --action create_hdf5_files --dataset $DATASET --max_seq_length 512 \
---max_predictions_per_seq 80 --vocab_file $BERT_PREP_WORKING_DIR/download/google_pretrained_weights/uncased_L-24_H-1024_A-16/vocab.txt --do_lower_case 1
