@@ -36,7 +36,7 @@ model:
       hidden_size: 768
       initializer_range: 0.02
       intermediate_size: 3072
-      max_position_embeddings: 512
+      max_position_embeddings: 1024
       num_attention_heads: 12
       num_hidden_layers: 12
       type_vocab_size: 2
@@ -47,7 +47,7 @@ model:
 
   infer_ds:
     data_file: '/data/WIKIPEDIA/hdf5_lower_case_1_seq_len_512_max_pred_80_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/wikicorpus_en_training_0.hdf5' # path to hdf5 file (or directory)
-    max_predictions_per_seq: 80
+    max_predictions_per_seq: 160
     batch_size: 16
     shuffle: false
     num_samples: -1
