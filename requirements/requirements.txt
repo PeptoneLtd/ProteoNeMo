@@ -1,20 +1,5 @@
-numpy>=1.21
-onnx>=1.7.0
-python-dateutil
-torch
-wrapt
-ruamel.yaml
-scikit-learn
-tqdm>=4.41.0
-numba
-wget
-frozendict
-unidecode
+libsndfile1
+ffmpeg
+Cython
 biopython
-pytorch-lightning>=1.5.10
-torchmetrics>=0.4.1rc0
-transformers>=4.0.1
-webdataset>=0.1.48,<=0.1.62
-omegaconf>=2.1.0
-hydra-core>=1.1.0
-pyyaml<6  # Pinned until omegaconf works with pyyaml>=6
+nemo_toolkit['all']
