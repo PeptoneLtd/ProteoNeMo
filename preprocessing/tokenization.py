@@ -48,7 +48,7 @@ def convert_to_unicode(text):
 def load_vocab(vocab_file):
     """Loads a vocabulary file into a dictionary."""
     vocab = collections.OrderedDict()
-    index = 0
+    index = 1
     with open(vocab_file, "r", encoding="utf-8") as reader:
         while True:
             token = reader.readline()
