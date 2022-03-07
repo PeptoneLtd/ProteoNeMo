@@ -18,7 +18,7 @@ from omegaconf import DictConfig, OmegaConf
 from nemo.core.config import hydra_runner
 from pytorch_lightning.plugins import DDPPlugin
 from nemo.utils.app_state import AppState
-from bert_prot_model import BERTPROTModel
+from proteonemo.models.bert_prot_model import BERTPROTModel
 from nemo.collections.nlp.data.language_modeling.lm_bert_dataset import BertPretrainingPreprocessedDataset
 from nemo.collections.nlp.modules.common.megatron.megatron_utils import compute_model_parallel_rank
 from torch.utils.data import DataLoader

@@ -11,3 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+from proteonemo.preprocessing.tokenization import ProteoNeMoTokenizer
+from proteonemo.preprocessing import tokenization
+from proteonemo.preprocessing.uniref_downloader import UniRefDownloader
+from proteonemo.preprocessing.uniprotkb_downloader import UniProtKBDownloader
+from proteonemo.preprocessing.uniparc_downloader import UniParcDownloader
+from proteonemo.preprocessing.downloader import Downloader
+from proteonemo.preprocessing.protein_sharding import Sharding

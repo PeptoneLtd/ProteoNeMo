@@ -24,8 +24,8 @@ import h5py
 import numpy as np
 from tqdm import tqdm, trange
 
-from tokenization import ProteoNeMoTokenizer
-import tokenization as tokenization
+from proteonemo.preprocessing.tokenization import ProteoNeMoTokenizer
+from proteonemo.preprocessing import tokenization as tokenization
 
 import random
 import collections

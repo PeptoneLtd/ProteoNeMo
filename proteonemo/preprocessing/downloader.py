@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from UniRefDownloader import UniRefDownloader
-from UniProtKBDownloader import UniProtKBDownloader
-from UniParcDownloader import UniParcDownloader
+from proteonemo.preprocessing.uniref_downloader import UniRefDownloader
+from proteonemo.preprocessing.uniprotkb_downloader import UniProtKBDownloader
+from proteonemo.preprocessing.UniParcDownloader import UniParcDownloader
 
 
 class Downloader:

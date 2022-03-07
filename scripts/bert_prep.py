@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import Downloader
-import ProteinSharding
+from proteonemo.preprocessing.downloader import Downloader
+from proteonemo.preprocessing.protein_sharding import Sharding
 
 import argparse
 import os
@@ -51,7 +51,7 @@ def main(args):
         if not os.path.exists(directory_structure['download']):
             os.makedirs(directory_structure['download'])
 
-        downloader = Downloader.Downloader(args.dataset, directory_structure['download'])
+        downloader = Downloader(args.dataset, directory_structure['download'])
         downloader.download()
 
     elif args.action == 'sharding':
@@ -90,7 +90,7 @@ def main(args):
                 os.makedirs(directory_structure['sharded'] + '/' + args.dataset)
 
             rng = random.Random(args.random_seed)
-            sharding = ProteinSharding.Sharding(args.input_files, output_file_prefix, args.n_training_shards, args.n_test_shards, args.fraction_test_set, rng)
+            sharding = Sharding(args.input_files, output_file_prefix, args.n_training_shards, args.n_test_shards, args.fraction_test_set, rng)
             sharding.load_fastas()
             sharding.write_shards_to_disk()
 
