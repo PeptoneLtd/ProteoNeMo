@@ -1,5 +1,3 @@
-libsndfile1
-ffmpeg
 Cython
 biopython
 nemo_toolkit

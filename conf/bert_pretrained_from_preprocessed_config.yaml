@@ -31,7 +31,7 @@ trainer:
   logger: false # provided by exp_manager
 
 model:
-  nemo_path: 'bert_base_wikipedia.nemo' # exported .nemo path
+  nemo_path: 'bert_base_proteonemo.nemo' # exported .nemo path
   only_mlm_loss: true # only use masked language model without next sentence prediction
   num_tok_classification_layers: 1 # number of token classification head output layers
   num_seq_classification_layers: 2 # number of sequence classification head output layers
@@ -57,7 +57,7 @@ model:
   tokenizer: null
 
   train_ds:
-    data_file: '/data/WIKIPEDIA/hdf5_lower_case_1_seq_len_512_max_pred_80_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en' # path to hdf5 file (or directory)
+    data_file: '/data/UNIREF50/hdf5_seq_len_1024_max_pred_160_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/uniref_50' # path to hdf5 file (or directory)
     max_predictions_per_seq: 160
     batch_size: 16
     shuffle: true
