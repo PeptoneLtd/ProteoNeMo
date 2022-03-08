@@ -46,7 +46,7 @@ model:
   tokenizer: null
 
   infer_ds:
-    data_file: '/data/UNIREF50/hdf5_seq_len_1024_max_pred_160_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/uniref_50/uniref50_en_training_0.hdf5' # path to hdf5 file (or directory)
+    data_file: '/data/UNIREF50/hdf5_seq_len_1024_max_pred_160_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/uniref_50/uniref_50_test_0.hdf5' # path to hdf5 file (or directory)
     max_predictions_per_seq: 160
     batch_size: 8
     shuffle: false

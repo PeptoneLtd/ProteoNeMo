@@ -27,7 +27,7 @@ from nemo.utils import logging
 assert torch.cuda.is_available()
 
 
-@hydra_runner(config_path="conf", config_name="bert_inference_from_preprocessed_config")
+@hydra_runner(config_path="../conf", config_name="bert_inference_from_preprocessed_config")
 def main(cfg: DictConfig) -> None:
     torch.set_grad_enabled(False)
     logging.info(f'Config:\n {OmegaConf.to_yaml(cfg)}')
