@@ -24,7 +24,7 @@ trainer:
 
 model:
   nemo_path: 'bert_base_proteonemo.nemo' # exported .nemo path
-  representations_path: 'bert_reprs'
+  representations_path: '/data/UNIREF50/bert_reprs/uniref_50/uniref_50_test_0'
 
   language_model:
     pretrained_model_name: bert-base-uncased # huggingface model name
