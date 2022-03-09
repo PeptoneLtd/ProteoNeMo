@@ -14,7 +14,7 @@
 
 from proteonemo.preprocessing.uniref_downloader import UniRefDownloader
 from proteonemo.preprocessing.uniprotkb_downloader import UniProtKBDownloader
-from proteonemo.preprocessing.UniParcDownloader import UniParcDownloader
+from proteonemo.preprocessing.uniparc_downloader import UniParcDownloader
 
 
 class Downloader:
