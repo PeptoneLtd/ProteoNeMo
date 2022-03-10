@@ -194,7 +194,7 @@ class BERTPROTModel(ModelPT):
         hidden_states = self.bert_model(
             input_ids=input_ids, token_type_ids=input_type_ids, attention_mask=input_mask,
         )
-        return (seq_names, hidden_states.squeeze(0))
+        return (seq_names, hidden_states.squeeze(0), input_mask)
 
     def setup_training_data(self, train_data_config: Optional[DictConfig]):
         self._train_dl = (

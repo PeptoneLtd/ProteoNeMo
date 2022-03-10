@@ -23,6 +23,7 @@ from proteonemo.data.prot_bert_dataset import BertInferencePreprocessedDataset
 from nemo.collections.nlp.modules.common.megatron.megatron_utils import compute_model_parallel_rank
 from torch.utils.data import DataLoader
 from nemo.utils import logging
+import numpy as np
 
 assert torch.cuda.is_available()
 
@@ -50,16 +51,19 @@ def main(cfg: DictConfig) -> None:
     preds = trainer.predict(model, request_dl)
 
     if cfg.model.representations_path:
-        for b, pred in enumerate(preds):
-            for pred in preds:
-                seq_names_batch, reprs_batch = pred
-                seq_names_batch = seq_names_batch[0]
-                i=0
-                while i<len(seq_names_batch):
-                    seq_name = seq_names_batch[i]
-                    reprs = reprs_batch[i]
-                    torch.save(reprs, f'{cfg.model.representations_path}/bert_preds/bert_reprs_{seq_name}.pt')
-                    i+=1
+        for pred in preds:
+            seq_names_batch, reprs_batch, masks_batch = pred
+            seq_names_batch = seq_names_batch[0]
+            i=0
+            while i<len(seq_names_batch):
+                seq_name = seq_names_batch[i]
+                reprs = reprs_batch[i]
+                mask = masks_batch[i]
+                # take only residue level representations
+                last_element = np.where(mask==1)[0][-1]
+                clean_reprs = reprs[1:last_element]
+                torch.save(clean_reprs, f'{cfg.model.representations_path}/bert_preds/bert_reprs_{seq_name}.pt')
+                i+=1
                     
 
 if __name__ == '__main__':
