@@ -190,11 +190,11 @@ class BERTPROTModel(ModelPT):
         Called in the predict command with the data from the inference dataloader
         passed in as `batch`.
         """
-        input_ids, input_type_ids, input_mask, output_ids, output_mask, labels = batch
+        input_ids, input_type_ids, input_mask, seq_names = batch
         hidden_states = self.bert_model(
             input_ids=input_ids, token_type_ids=input_type_ids, attention_mask=input_mask,
         )
-        return hidden_states.squeeze(0)
+        return (hidden_states.squeeze(0), seq_names)
 
     def setup_training_data(self, train_data_config: Optional[DictConfig]):
         self._train_dl = (

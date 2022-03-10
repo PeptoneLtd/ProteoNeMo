@@ -19,7 +19,7 @@ from nemo.core.config import hydra_runner
 from pytorch_lightning.plugins import DDPPlugin
 from nemo.utils.app_state import AppState
 from proteonemo.models.bert_prot_model import BERTPROTModel
-from nemo.collections.nlp.data.language_modeling.lm_bert_dataset import BertPretrainingPreprocessedDataset
+from proteonemo.data.prot_bert_dataset import BertInferencePreprocessedDataset
 from nemo.collections.nlp.modules.common.megatron.megatron_utils import compute_model_parallel_rank
 from torch.utils.data import DataLoader
 from nemo.utils import logging
@@ -40,22 +40,20 @@ def main(cfg: DictConfig) -> None:
 
     model = BERTPROTModel.restore_from(restore_path=cfg.model.nemo_path, trainer=trainer)
     model.freeze()
-    dataset = BertPretrainingPreprocessedDataset(input_file=cfg.model.infer_ds.data_file, 
-        max_predictions_per_seq=cfg.model.infer_ds.max_predictions_per_seq)
+    dataset = BertInferencePreprocessedDataset(input_file=cfg.model.infer_ds.data_file)
 
     request_dl = DataLoader(dataset, 
         batch_size=cfg.model.infer_ds.batch_size,
         shuffle=cfg.model.infer_ds.shuffle,
         num_workers=cfg.model.infer_ds.num_workers)
 
-    preds = trainer.predict(model, request_dl)
+    preds, pred_seq_names = trainer.predict(model, request_dl)
 
     if cfg.model.representations_path:
-        i=0
-        for pred in preds:
-            for sequence in pred:
-                torch.save(sequence, f'{cfg.model.representations_path}/bert_results_{i}.pt')
-                i+=1
+        for b, pred in enumerate(preds):
+            for i, sequence in enumerate(pred):
+                seq_name = pred_seq_names[b][i]
+                torch.save(sequence, f'{cfg.model.representations_path}/bert_results_{seq_name}.pt')
 
 
 if __name__ == '__main__':
