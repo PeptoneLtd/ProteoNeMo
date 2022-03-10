@@ -47,14 +47,20 @@ def main(cfg: DictConfig) -> None:
         shuffle=cfg.model.infer_ds.shuffle,
         num_workers=cfg.model.infer_ds.num_workers)
 
-    preds, pred_seq_names = trainer.predict(model, request_dl)
+    preds = trainer.predict(model, request_dl)
 
     if cfg.model.representations_path:
         for b, pred in enumerate(preds):
-            for i, sequence in enumerate(pred):
-                seq_name = pred_seq_names[b][i]
-                torch.save(sequence, f'{cfg.model.representations_path}/bert_results_{seq_name}.pt')
-
+            for pred in preds:
+                seq_names_batch, reprs_batch = pred
+                seq_names_batch = seq_names_batch[0]
+                i=0
+                while i<len(seq_names_batch):
+                    seq_name = seq_names_batch[i]
+                    reprs = reprs_batch[i]
+                    torch.save(reprs, f'{cfg.model.representations_path}/bert_preds/bert_reprs_{seq_name}.pt')
+                    i+=1
+                    
 
 if __name__ == '__main__':
     main()

@@ -46,11 +46,13 @@ class BertInferencePreprocessedDataset(Dataset):
             'sequence_names',
         ]
         self.num_inputs = [np.asarray(f[key][:]) for key in num_keys]
-        self.lit_inputs = [np.asarray(f[key][:]) for key in num_keys]
+        self.lit_inputs = []
         for key in lit_keys:
+            sec_names = []
             for seq_name in f[key][:]:
                 seq_name_dec = seq_name.decode(encoding="utf-8")
-                self.lit_inputs.append(seq_name_dec)
+                sec_names.append(seq_name_dec)
+            self.lit_inputs.append(sec_names)
         f.close()
 
     def __len__(self):
@@ -61,7 +63,7 @@ class BertInferencePreprocessedDataset(Dataset):
         [input_ids, input_mask, segment_ids] = [
             input[index].astype(np.int64) for input in self.num_inputs
         ]
-        seq_names = [seq_name.decode(encoding="utf-8") for seq_name in self.lit_inputs]
+        seq_names = [input[index] for input in self.lit_inputs]
       
         return (input_ids, segment_ids, input_mask, seq_names)
 
