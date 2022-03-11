@@ -13,3 +13,4 @@
 # limitations under the License.
 
 from proteonemo.data.prot_bert_dataset import BertInferencePreprocessedDataset
+from proteonemo.data.extract_embeddings import ExtractEmbeddings
