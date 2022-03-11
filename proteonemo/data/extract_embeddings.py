@@ -51,8 +51,8 @@ class ExtractEmbeddings:
                     sequence = sequence.strip()
                     tokens = self.tokenizer.tokenize(sequence)
                     tokens = tokens[:self.max_seq_length]
-                    tokens[0] = '[CLS]'
-                    tokens[-1] = '[SEP]'
+                    tokens.insert(0, '[CLS]')
+                    tokens.insert(-1, '[SEP]')
                     p_name = str(record.id)
                     p_name = p_name.replace(" ", "_")
                     p_name = p_name.replace("|", "-")
