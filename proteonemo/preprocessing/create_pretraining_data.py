@@ -150,9 +150,9 @@ def create_instance_from_sequence(
   """Creates `TrainingInstance`s for a single document."""
   sequence = all_sequences[sequence_index]
  
-  tokens = sequence[:max_seq_length]
-  tokens[0] = '[CLS]'
-  tokens[-1] = '[SEP]'
+  tokens = sequence[:max_seq_length-2]
+  tokens.insert(0, '[CLS]')
+  tokens.insert(-1, '[SEP]')
   (tokens, masked_lm_positions,
       masked_lm_labels) = create_masked_lm_predictions(
   tokens, masked_lm_prob, max_predictions_per_seq, vocab_residues, rng)
