@@ -55,11 +55,6 @@ def main():
                         type=str,
                         required=True,
                         help="The vocabulary the BERT model will evaluated on.")
-    parser.add_argument("--small_vocab_file",
-                        default=None,
-                        type=str,
-                        required=True,
-                        help="The vocabulary used for the masking procedure.")
     parser.add_argument("--input_file",
                         default=None,
                         type=str,
@@ -108,7 +103,7 @@ def main():
 
     args = parser.parse_args()
 
-    tokenizer = ProteoNeMoTokenizer(args.vocab_file, args.small_vocab_file, do_upper_case=args.do_upper_case, 
+    tokenizer = ProteoNeMoTokenizer(args.vocab_file, args.vocab_file, do_upper_case=args.do_upper_case, 
       max_len=args.max_seq_length)
 
     input_files = []
