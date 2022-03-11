@@ -30,7 +30,7 @@ from nemo.collections.nlp.modules.common.megatron.megatron_utils import compute_
 assert torch.cuda.is_available()
 
 
-def get_representations(preds, output_file):
+def get_representations(preds, output_dir):
     for pred in preds:
         seq_names_batch, reprs_batch, masks_batch = pred
         seq_names_batch = seq_names_batch[0]
@@ -42,7 +42,11 @@ def get_representations(preds, output_file):
             # take only residue level representations
             last_element = np.where(mask==1)[0][-1]
             clean_reprs = reprs[1:last_element]
-            torch.save(clean_reprs, f'{output_file}/bert_reprs_{seq_name}.pt')
+
+            if not os.path.exists(output_dir):
+              os.makedirs(output_dir)
+
+            torch.save(clean_reprs, f'{output_dir}/bert_reprs_{seq_name}.pt')
             i+=1
 
 
@@ -68,7 +72,6 @@ def main():
     parser.add_argument("--data_file",
                         default='../input_sequences.hdf5',
                         type=str,
-                        required=True,
                         help="The .hdf5 file containing the tokenized .fasta inputs.")                    
     parser.add_argument("--model_file", 
                         type=str, 
@@ -87,18 +90,15 @@ def main():
                         help="Whether to upper case the input text. True for uncased models, False for cased models.")
     parser.add_argument("--tensor_model_parallel_size", 
                         type=int, 
-                        default=1, 
-                        required=True,
+                        default=1,
     )
     parser.add_argument("--batch_size", 
                         type=int, 
                         default=8, 
-                        required=True,
     )
     parser.add_argument("--num_workers", 
                         type=int, 
                         default=8, 
-                        required=True,
     )
 
     args = parser.parse_args()
@@ -114,9 +114,9 @@ def main():
     else:
       raise ValueError("{} is not a valid path".format(args.input_file))
 
-    instances = ExtractEmbeddings.load_fasta_files(input_files, tokenizer, args.max_seq_length)
-    ExtractEmbeddings.write_instance_to_example_file(instances, tokenizer, args.max_seq_length,
-                                    args.data_file)
+    extract_embeddings = ExtractEmbeddings(input_files, args.data_file, tokenizer, args.max_seq_length)
+    instances = extract_embeddings.load_fasta_files()
+    extract_embeddings.write_instance_to_example_file(instances)
 
     torch.set_grad_enabled(False)
     trainer = pl.Trainer(plugins=[DDPPlugin(find_unused_parameters=True)], devices=args.tensor_model_parallel_size, precision=16, accelerator='gpu')
@@ -136,7 +136,7 @@ def main():
         num_workers=args.num_workers)
 
     preds = trainer.predict(model, request_dl)
-    get_representations(preds, args.output_file)
+    get_representations(preds, args.output_dir)
 
 
 if __name__ == '__main__':

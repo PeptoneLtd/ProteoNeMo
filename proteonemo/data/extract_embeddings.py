@@ -87,7 +87,7 @@ class ExtractEmbeddings:
             assert len(input_ids) <= self.max_seq_length
 
             while len(input_ids) < self.max_seq_length:
-                self.input_ids.append(0)
+                input_ids.append(0)
                 input_mask.append(0)
 
             assert len(input_ids) == self.max_seq_length
