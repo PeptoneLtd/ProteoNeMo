@@ -24,6 +24,7 @@ ProteoNeMo can be pre-trained on:
     - [Quick start](#quick-start)
     - [Download and preprocess datasets](#download-and-preprocess-datasets)
     - [ProteoNeMo pre-training](#proteonemo-pre-training)
+    - [Residue level representations extraction](#residue-level-representations-extraction)
   - [Licence](#licence)
 
 ## Usage
@@ -96,7 +97,9 @@ The pre-training will start and a progress bar will appear
 
 #### Tensorboard monitoring
 
-One the pre-training procedure has started a `nemo_experiments` directory will be automatically created under the [scripts](scripts) directory. Based on the `name: <PretrainingModelName>` parameter in the `.yaml` configuration file, a `<PretrainingModelName>` sub-directory containing all the related pre-training experiment logs will be created under `nemo_experiments`.
+Once the pre-training procedure has started a `nemo_experiments` directory will be automatically created under the [scripts](scripts) directory. 
+
+Based on the `name: <PretrainingModelName>` parameter in the `.yaml` configuration file, a `<PretrainingModelName>` sub-directory containing all the related pre-training experiment logs will be created under `nemo_experiments`.
 
 In the ProteoNeMo directory run: 
 ```bash
@@ -105,6 +108,27 @@ tensorboard --logdir=scripts/nemo_experiments/<PretrainingModelName>
 
 The Tensorboard UI will be available on port 6006
 
+### Residue level representations extraction
+
+Once a ProteoNeMo model will be pre-trained you'll get a `.nemo` file, placed in the `nemo_path` you've utilised in the `.yaml` configuration file.
+
+You're now ready to extract the residue level representations of each protein a `.fasta` file.
+
+In the ProteoNeMo directory run:
+```bash
+cd scripts
+python bert_eval.py --input_file <fasta_input_file> \
+                    --vocab_file ../static/vocab.txt \
+                    --output_dir <reprs_output_dir> \
+                    --model_file <nemo_pretrained_model>
+```
+
+Where:
+
+- `--input_file` defines the `.fasta` file containing the proteins for which you want to extract the residue level representations
+- `--vocab_file` defines the `.txt` file containing the vacabulary you want to use during the inference phase. We suggets you use the [standard](static/vocab.txt) one
+- `--output_dir` defines the output directory where the residue level representations will be written. You'll get a `.pt` file for each protein sequence in the `--input_file` 
+- `--model_file` defines the `.nemo` file used to get the pre-trained weights needed to get the residue level representations
 
 ## Licence
 
