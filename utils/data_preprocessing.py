@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import torch
 import nemo
@@ -13,21 +14,36 @@ import argparse
 args_parser = argparse.ArgumentParser(description='Get the CB513 json data path and the output folder path.')
 
 # Add the arguments
-args_parser.add_argument('cb513_json_path',
+args_parser.add_argument('-d',
+                        '--data_path',
                         action='store',
+                        required=True,
                         type=str
                         )
 
-args_parser.add_argument('output_folder',
+args_parser.add_argument('-o',
+                        '--output_folder',
                         action='store',
+                        require=True,
                         type=str
+                        )
+
+args_parser.add_argument('-s',
+                        '--shuffle',
+                        action='store_true')
+
+args_parser.add_argument('-rs',
+                        '--random_seed',
+                        action='store',
+                        type=int
                         )
 
 # Execute the parse_args() method
 args = args_parser.parse_args()
-cb513_json_path = args.cb513_json_path
+cb513_json_path = args.data_path
 output_folder_path = args.output_folder
-
+shuffle_bool=args.shuffle
+random_seed=args.random_seed
 # add the shuffle and random seed arguments later
 
 def preprocess_ssp(path_CB513_json):
@@ -120,7 +136,7 @@ def write_folds(path_CB513_json, output_folder, shuffle=True, random_seed=None):
         _save_features(f'{output_folder}/CB513_test_fold_{i}.hdf5', features_test)
 
 def main():
-    write_folds(cb513_json_path, output_folder_path, shuffle=True, random_seed=None)
+    write_folds(cb513_json_path, output_folder_path, shuffle=shuffle_bool, random_seed=random_seed)
 
 if __name__ == "__main__":
     main()
