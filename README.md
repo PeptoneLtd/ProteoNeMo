@@ -44,9 +44,30 @@ python setup.py install
 ProteoNeMo can be pre-trained on the datasets pointed-out above. You can choose your preferred one or make use of two or more of them at the same time.
 
 Each dataset will be:
-* **Downloaded** from [UniProt](https://www.uniprot.org/) as a [.fasta](https://en.wikipedia.org/wiki/FASTA_format) file
+* **Downloaded** from [UniProt](https://www.uniprot.org/) and decopressed as a [.fasta](https://en.wikipedia.org/wiki/FASTA_format) file
 * **Sharded** into several smaller `.txt` sub-files containing a random set of the related `.fasta` file, already splitted into **training** and **evaluation** samples
 * **Tokenized** into several [.hdf5](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) files, one for each `.txt` sharded file, where the **masking** procedure has been already applied
+
+In the ProteoNeMo directory run:
+```bash
+BERT_PREP_WORKING_DIR = <your_dir>
+cd scripts
+bash create_datasets_from_start.sh <to_download> 
+```
+
+Where:
+
+- `BERT_PREP_WORKING_DIR` defines the directory where the data will be downloaded and preprocessed
+- `<to_download>` defines the datasets we want to download and preprocess where `uniref_50_only` is the default. 
+
+The outputs are the *download*, *sharded* and *hdf5* directories under the `BERT_PREP_WORKING_DIR` parent directory, containing the related files.
+
+| To Download | Datasets |
+|-------------|----------|
+| `uniref_50_only` | **UniRef 50** |
+| `uniref_all`| **UniRef 50, 90** and **100** |
+| `uniparc`| **UniParc** |
+| `uniprotkb_all`| **UniProtKB Swiss-Prot, TrEMBL** and  **isoform sequences** |
 
 ## Licence
 
