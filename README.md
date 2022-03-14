@@ -23,6 +23,7 @@ ProteoNeMo can be pre-trained on:
   - [Usage](#usage)
     - [Quick start](#quick-start)
     - [Download and preprocess datasets](#download-and-preprocess-datasets)
+    - [ProteoNeMo pre-training](#proteonemo-pre-training)
   - [Licence](#licence)
 
 ## Usage
@@ -68,6 +69,42 @@ The outputs are the *download*, *sharded* and *hdf5* directories under the `BERT
 | `uniref_all`| **UniRef 50, 90** and **100** |
 | `uniparc`| **UniParc** |
 | `uniprotkb_all`| **UniProtKB Swiss-Prot, TrEMBL** and  **isoform sequences** |
+
+### ProteoNeMo pre-training
+
+Once the download and preprocessing procedure is completed you're ready to pre-train ProteoNeMo.
+
+The pre-training procedure exploits NeMo to solve the **Masked Language Modeling** (Masked LM) task. One training instance of Masked LM is a single modified protein sequence. Each token in the sentence has a 15% chance of being replaced by a [MASK] token. The chosen token is replaced with [MASK] 80% of the time, 10% with a random token and the remaining 10% the token is retained. The task is then to predict the original token.
+
+We have currently integrated [BERT](https://arxiv.org/abs/1810.04805)-like *uncased* models from [HuggingFace](https://huggingface.co/).
+
+The first thing you need to do is modifing a `model_config.yaml` file in the [conf](conf) directory, specifying the relative pre-training and model options. You can use [this](conf/bert_pretrained_from_preprocessed_config.yaml) config as template. 
+
+Take a look to [these](https://github.com/NVIDIA/NeMo/tree/main/tutorials) NeMo tutorials to get familiar with such options.
+
+Secondly, you have to modify the `config_name` argument of the `@hydra_runner` decorator in [bert_pretraining.py](scripts/bert_pretraining.py)
+
+Lastly, in the ProteoNeMo directory run:
+```bash
+cd scripts
+python bert_pretraining.py 
+```
+
+The pre-training will start and a progress bar will appear
+
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/50)
+
+#### Tensorboard monitoring
+
+One the pre-training procedure has started a `nemo_experiments` directory will be automatically created under the [scripts](scripts) directory. Based on the `name: <PretrainingModelName>` parameter in the `.yaml` configuration file, a `<PretrainingModelName>` sub-directory containing all the related pre-training experiment logs will be created under `nemo_experiments`.
+
+In the ProteoNeMo directory run: 
+```bash
+tensorboard --logdir=scripts/nemo_experiments/<PretrainingModelName> 
+```
+
+The Tensorboard UI will be available on port 6006
+
 
 ## Licence
 
