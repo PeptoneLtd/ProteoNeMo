@@ -59,27 +59,27 @@ def main(args):
         if args.dataset == 'uniparc' or 'uniref' in args.dataset or 'uniprotkb' in args.dataset:
             if args.input_files is None:
                 if args.dataset == 'uniparc':
-                    args.input_files = [directory_structure['download'] + '/uniparc_active.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniparc/uniparc_active.fasta']
                 elif args.dataset == 'uniref_50':
-                    args.input_files = [directory_structure['download'] + '/uniref50.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniref_50/uniref50.fasta']
                 elif args.dataset == 'uniref_90':
-                    args.input_files = [directory_structure['download'] + '/uniref90.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniref_90/uniref90.fasta']
                 elif args.dataset == 'uniref_100':
-                    args.input_files = [directory_structure['download'] + '/uniref100.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniref_100/uniref100.fasta']
                 elif args.dataset == 'uniref_all':
-                    args.input_files = [directory_structure['download'] + '/uniref50.fasta',
-                        directory_structure['download'] + '/uniref90.fasta',
-                        directory_structure['download'] + '/uniref100.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniref_50/uniref50.fasta',
+                        directory_structure['download'] + '/uniref_90/uniref90.fasta',
+                        directory_structure['download'] + '/uniref_100/uniref100.fasta']
                 elif args.dataset == 'uniprotkb_swissprot':
-                    args.input_files = [directory_structure['download'] + '/uniprot_sprot.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniprotkb_swissprot/uniprot_sprot.fasta']
                 elif args.dataset == 'uniprotkb_trembl':
-                    args.input_files = [directory_structure['download'] + '/uniprot_trembl.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniprotkb_trembl/uniprot_trembl.fasta']
                 elif args.dataset == 'uniprotkb_isoformseqs':
-                    args.input_files = [directory_structure['download'] + '/uniprot_sprot_varsplic.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniprotkb_isoformseqs/uniprot_sprot_varsplic.fasta']
                 elif args.dataset == 'uniprotkb_all':
-                    args.input_files = [directory_structure['download'] + '/uniprot_sprot.fasta',
-                        directory_structure['download'] + '/uniprot_trembl.fasta',
-                        directory_structure['download'] + '/uniprot_sprot_varsplic.fasta']
+                    args.input_files = [directory_structure['download'] + '/uniprotkb_swissprot/uniprot_sprot.fasta',
+                        directory_structure['download'] + '/uniprotkb_trembl/uniprot_trembl.fasta',
+                        directory_structure['download'] + '/uniprotkb_isoformseqs/uniprot_sprot_varsplic.fasta']
 
             output_file_prefix = directory_structure['sharded'] + '/' + args.dataset + '/' + args.dataset
 
