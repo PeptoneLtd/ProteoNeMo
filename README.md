@@ -55,7 +55,7 @@ Each dataset will be:
 
 In the ProteoNeMo directory run:
 ```bash
-BERT_PREP_WORKING_DIR = <your_dir>
+export BERT_PREP_WORKING_DIR = <your_dir>
 cd scripts
 bash create_datasets_from_start.sh <to_download> 
 ```
