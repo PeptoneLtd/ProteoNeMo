@@ -5,23 +5,13 @@ This repository containes the code for pre-training and inference procedures of 
 
 ProteoNeMo can be used to extract residue level representations of proteins and to train related downstream tasks.
 
-ProteoNeMo can be pre-trained on:
-* [UniRef](https://www.uniprot.org/uniref/)
-  * UniRef 50
-  * UniRef 90
-  * UniRef 100
-* [UniParc](https://www.uniprot.org/uniparc/)  
-* [UniProtKB](https://www.uniprot.org/uniprot/)
-  * UniProtKB Swiss-Prot
-  * UniProtKB TrEMBL
-  * [UniProtKB isoform sequences](https://www.uniprot.org/help/canonical_and_isoforms)
-
 ## Table of Contents
 
 - [ProteoNeMo](#proteonemo)
   - [Table of Contents](#table-of-contents)
   - [Usage](#usage)
     - [Quick start](#quick-start)
+    - [Datasets](#datasets)
     - [Download and preprocess datasets](#download-and-preprocess-datasets)
     - [ProteoNeMo pre-training](#proteonemo-pre-training)
     - [Residue level representations extraction](#residue-level-representations-extraction)
@@ -40,6 +30,19 @@ Clone the ProteoNeMo repository, go to the ProteoNeMo directory and run
 ```bash
 python setup.py install
 ```
+
+### Datasets
+
+ProteoNeMo can be pre-trained on:
+* [UniRef](https://www.uniprot.org/uniref/)
+  * UniRef 50
+  * UniRef 90
+  * UniRef 100
+* [UniParc](https://www.uniprot.org/uniparc/)  
+* [UniProtKB](https://www.uniprot.org/uniprot/)
+  * UniProtKB Swiss-Prot
+  * UniProtKB TrEMBL
+  * [UniProtKB isoform sequences](https://www.uniprot.org/help/canonical_and_isoforms)
 
 ### Download and preprocess datasets
 
