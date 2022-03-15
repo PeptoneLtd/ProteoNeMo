@@ -51,7 +51,7 @@ model:
       num_attention_heads: 20
       num_hidden_layers: 34
       type_vocab_size: 2
-      vocab_size: 30
+      vocab_size: 31
     config_file: null # json file, precedence over config
 
   tokenizer: null
