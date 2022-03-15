@@ -104,7 +104,7 @@ def main(args):
             os.makedirs(directory_structure['hdf5'] + "/" + args.dataset)
 
         def create_record_worker(filename_prefix, shard_id, output_format='hdf5'):
-            bert_preprocessing_command = 'python ../preprocessing/create_pretraining_data.py'
+            bert_preprocessing_command = 'python ../proteonemo/preprocessing/create_pretraining_data.py'
             bert_preprocessing_command += ' --input_file=' + directory_structure['sharded'] + '/' + args.dataset + '/' + filename_prefix + '_' + str(shard_id) + '.txt'
             bert_preprocessing_command += ' --output_file=' + directory_structure['hdf5'] + '/' + args.dataset + '/' + filename_prefix + '_' + str(shard_id) + '.' + output_format
             bert_preprocessing_command += ' --vocab_file=' + args.vocab_file
