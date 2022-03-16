@@ -94,9 +94,7 @@ cd scripts
 python bert_pretraining.py 
 ```
 
-The pre-training will start and a progress bar will appear
-
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/50)
+The pre-training will start and a progress bar will appear  ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/50)
 
 #### Tensorboard monitoring
 
