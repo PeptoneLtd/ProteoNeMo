@@ -65,7 +65,7 @@ Where:
 - `BERT_PREP_WORKING_DIR` defines the directory where the data will be downloaded and preprocessed
 - `<to_download>` defines the datasets we want to download and preprocess where `uniref_50_only` is the default. 
 
-The outputs are the `download`, `sharded` and `hdf5` directories under the `BERT_PREP_WORKING_DIR` parent directory, containing the related files.
+The outputs are the `download`, `sharded` and `hdf5` directories under the `$BERT_PREP_WORKING_DIR` parent directory, containing the related files.
 
 | To Download | Datasets |
 |-------------|----------|
