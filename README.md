@@ -65,7 +65,7 @@ Where:
 - `BERT_PREP_WORKING_DIR` defines the directory where the data will be downloaded and preprocessed
 - `<to_download>` defines the datasets we want to download and preprocess where `uniref_50_only` is the default. 
 
-The outputs are the *download*, *sharded* and *hdf5* directories under the `BERT_PREP_WORKING_DIR` parent directory, containing the related files.
+The outputs are the `download`, `sharded` and `hdf5` directories under the `BERT_PREP_WORKING_DIR` parent directory, containing the related files.
 
 | To Download | Datasets |
 |-------------|----------|
@@ -82,7 +82,7 @@ The pre-training procedure exploits NeMo to solve the **Masked Language Modeling
 
 We have currently integrated [BERT](https://arxiv.org/abs/1810.04805)-like *uncased* models from [HuggingFace](https://huggingface.co/).
 
-The first thing you need to do is modifing a `model_config.yaml` file in the [conf](conf) directory, specifying the relative pre-training and model options. You can use [this](conf/bert_pretrained_from_preprocessed_config.yaml) config as template. 
+The first thing you need to do is creating a `model_config.yaml` file in the [conf](conf) directory, specifying the relative pre-training and model options. You can use [this](conf/bert_pretrained_from_preprocessed_config.yaml) config as template. 
 
 Take a look to [these](https://github.com/NVIDIA/NeMo/tree/main/tutorials) NeMo tutorials to get familiar with such options.
 
