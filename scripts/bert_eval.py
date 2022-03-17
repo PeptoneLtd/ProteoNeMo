@@ -64,7 +64,7 @@ def main():
                         type=str,
                         required=True,
                         help="The input evaluation dataset. can be directory with .fasta files or a path to a single file")
-    parser.add_argument("--output_file",
+    parser.add_argument("--output_dir",
                         default=None,
                         type=str,
                         required=True,
