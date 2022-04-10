@@ -675,3 +675,38 @@ class BERTPROTModel_attn(ModelPT):
             )
         )
         return result
+
+
+
+# How to use this:
+# ----------------
+# Given a .nemo file from a pretrained BERTPROTModel (found in proteonemo.models) take the config file 'cfg' from it.
+#
+# 1. add an output_attentions=True flag in the cf.language_model part
+# 2. change the 'target' part of the cfg to the new 'BERTPROTModel_attn' model 
+# 3. with this updated config, create an instance of 'BERTPROTModel_attn' 
+# 4. load the weights in it and the model is ready for use and it will have the attentions in the 'predict_step' function
+#
+# E.g. 
+
+#import copy
+
+# Get the config file from the .nemo file
+
+#tmp_protbert = BERTPROTModel_attn.restore_from('pretrained_model.nemo')
+#cfg = copy.deepcopy(tmp_protbert.cfg)
+
+# Step 1. and 2. - Modify the cfg
+
+#OmegaConf.set_struct(cfg, False)
+#cfg.language_model.config['output_attentions'] = True
+#cfg.target = 'BERTPROTModel_attn'
+#OmegaConf.set_struct(cfg, True)
+
+# Step 3. - create a new instance of the BERTPROTModel_attn with the modified config
+
+#tmp_protbert = BERTPROTModel_attn(cfg)
+
+# Step 4. - load the weights from the model_weight.ckpt of the nemo file
+
+#tmp_protbert.load_state_dict(torch.load('model_weights.ckpt'))
