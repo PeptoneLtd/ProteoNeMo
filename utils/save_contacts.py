@@ -3,6 +3,7 @@ import numpy as np
 import sys 
 import os
 import tqdm
+from itertools import groupby
 
 import cmap_tools
 
@@ -58,11 +59,21 @@ contact_required=args.contact_required
 
 def main():
 
+    infile = open(f'{txt_path}', "r")
+    firstLine = infile.readline()
+    infile.close()
+
     pdbids = []
     with open(f'{txt_path}') as f:
-        pdbids = f.readline().strip()
-
-    pdbids = pdbids.split(',')
+        if firstLine[0] == '>':
+            faiter = (x[1] for x in groupby(f, lambda line: line[0] == ">"))
+            for header in faiter:
+                header = next(header)[1:].strip()
+                seq = "".join(s.strip() for s in next(faiter))
+                pdbids.append(header)
+        else:
+            pdbids = f.readline().strip()
+            pdbids = pdbids.split(',')
 
     pbar = tqdm.tqdm(total=len(pdbids), desc='PDBID: ', file=sys.stdout)
     for pdbid in pdbids:
