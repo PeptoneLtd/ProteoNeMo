@@ -41,6 +41,10 @@ from typing import List, Tuple, Dict, Optional
 import proteonemo
 import bert_prot_attn_model
 from proteonemo.data import prot_bert_dataset
+from proteonemo.data.extract_embeddings import ExtractEmbeddings
+from proteonemo.preprocessing import ProteoNeMoTokenizer
+from proteonemo.preprocessing import tokenization as tokenization
+
 
 # Some default parameter for inference
 DEFAULT = {}
@@ -108,7 +112,14 @@ def _get_attention_maps(model_instance, input_file: str) -> List[Tuple[str, Tupl
                         precision=16, 
                         accelerator='gpu')
     preds = trainer.predict(model_instance, request_dl)
-    
+    # The first entry in the tuple is seq_name, typically pdb_id; i.e a tuple of seq_names that has a length of batch size
+    # Second entry in the tuple is last_hidden_states, shape (batch_size, sequence_length, hidden_size), 
+    # sequence length is typically the max_sequence length, e.g. 1024;
+    # Third entry in the tuple is the attentions, it is again a tupple that has length of the number of layers, 
+    # and for each layer it has the shape (batch_size, num_heads, sequence_length, sequence_length);
+    # Fourth entry in the tuple is the input_mask, which has shape (batch_size, sequence_length)    
+
+
     # get the attention maps
     attn_maps = []
     for pred_ in preds:
@@ -117,3 +128,37 @@ def _get_attention_maps(model_instance, input_file: str) -> List[Tuple[str, Tupl
             attn_maps.append((seq_name, tuple([layer[i, ..., 1:seq_len, 1:seq_len].clone() for layer in pred_[2]])))
     
     return attn_maps
+
+
+def _fasta_hdf_converter(fasta_type_input: str):
+    '''Converts a fasta type input to .hdf5 that can be fed to preteonemo models
+    returns the hdf5 file.
+    Input is either a fasta file or a list or tuple, whose elements are 
+    elements of a fasta file, i.e. (sequence_id, sequence)
+    The .hdf5 file is saved in the same directory, where the fasta file is located'''
+    if isinstance(fasta_type_input, str): # is is a string?
+        formated_input = fasta_type_input
+            
+    if isinstance(fasta_type_input, (tuple,list)):
+        cwd = os.getcwd()
+        if not os.path.isdir(f'{cwd}/_tmp_fasta'):
+            os.mkdir(f'{cwd}/_tmp_fasta')
+        
+        # write an auxiliary fasta file
+        ofile = open(f'{os.getcwd()}/_tmp_fasta/aux.fasta', "w")
+        for item in fasta_type_input:
+            ofile.write(">" + str(item[0]) + "\n" +str(item[1]) + "\n")
+            
+        ofile.close()
+        formated_input = f'{os.getcwd()}/_tmp_fasta/aux.fasta'
+    
+    parent_folder = os.path.dirname(formated_input)
+    
+    pnemo_tokenizer = ProteoNeMoTokenizer('/ProteoNeMo/static/vocab.txt', '/ProteoNeMo/static/vocab_small.txt')
+    embedding_engine = ExtractEmbeddings([formated_input], 
+                                    f'{parent_folder}/aux.hdf5',
+                                    pnemo_tokenizer,
+                                    1024)
+    instances = embedding_engine.load_fasta_files()
+    embedding_engine.write_instance_to_example_file(instances)
+    print(f'hdf5 file is saved in {parent_folder}/aux.hdf5')
