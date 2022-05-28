@@ -1,7 +1,7 @@
 # ProteoNeMo
 This repository containes the code for pre-training and inference procedures of **protein language models** with [Nvidia NeMo toolkit](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/starthere/intro.html) from Peptone Ltd.
 
-[![GitHub Super-Linter](https://github.com/peptoneinc/ProteoNeMo/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![GitHub Super-Linter](https://github.com/peptoneltd/ProteoNeMo/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 ProteoNeMo can be used to extract residue level representations of proteins and to train related downstream tasks.
 
