@@ -18,11 +18,11 @@ M
 H
 W
 C
-X
 B
 U
 Z
 O
+X
 .
 -
 [CLS]
